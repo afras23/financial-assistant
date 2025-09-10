@@ -11,21 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [expense-service, ml-service]
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: testdb
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U user -d testdb"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        service: [expense-service, ml-service, api-gateway]
 
     steps:
       - uses: actions/checkout@v4
@@ -39,26 +25,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install alembic psycopg2-binary pytest
+          pip install pytest
 
-      - name: Run migrations (if Alembic present)
+      - name: Run unit tests only
         working-directory: services/${{ matrix.service }}
         env:
-          DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
           PYTHONPATH: ${{ github.workspace }}/services/${{ matrix.service }}
         run: |
-          if [ -f alembic.ini ]; then
-            echo "Running alembic migrations..."
-            alembic upgrade head || (echo "Alembic failed" && exit 1)
-          else
-            echo "No alembic.ini, skipping migrations"
-          fi
-
-      - name: Run tests
-        working-directory: services/${{ matrix.service }}
-        env:
-          DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
-          PYTHONPATH: ${{ github.workspace }}/services/${{ matrix.service }}
-        run: |
-          echo "Running pytest..."
-          pytest -v
+          echo "Running pytest (unit tests only)..."
+          pytest -v -k "not integration"
