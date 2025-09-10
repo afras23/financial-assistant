@@ -45,6 +45,7 @@ jobs:
         working-directory: services/${{ matrix.service }}
         env:
           DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
+          PYTHONPATH: services/${{ matrix.service }}
         run: |
           if [ -f alembic.ini ]; then
             echo "Running alembic migrations..."
