@@ -1,3 +1,5 @@
+# CI workflow - last updated Sept 10
+
 name: CI
 
 on:
