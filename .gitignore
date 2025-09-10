@@ -1,0 +1,24 @@
+# --- Python ---
+venv/
+*/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Node / React ---
+node_modules/
+frontend/node_modules/
+dist/
+build/
+
+# --- Logs ---
+*.log
+
+# --- Env / secrets ---
+.env
+*.env
+
+# --- Misc ---
+.DS_Store
+
