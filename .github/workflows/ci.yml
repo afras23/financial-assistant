@@ -45,7 +45,7 @@ jobs:
         working-directory: services/${{ matrix.service }}
         env:
           DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
-          PYTHONPATH: services/${{ matrix.service }}
+          PYTHONPATH: ${{ github.workspace }}/services/${{ matrix.service }}
         run: |
           if [ -f alembic.ini ]; then
             echo "Running alembic migrations..."
@@ -58,7 +58,7 @@ jobs:
         working-directory: services/${{ matrix.service }}
         env:
           DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
+          PYTHONPATH: ${{ github.workspace }}/services/${{ matrix.service }}
         run: |
           echo "Running pytest..."
           pytest -v
-
