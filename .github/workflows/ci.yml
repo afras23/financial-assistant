@@ -47,7 +47,10 @@ jobs:
           DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
         run: |
           if [ -f alembic.ini ]; then
-            alembic upgrade head
+            echo "Running alembic migrations..."
+            alembic upgrade head || (echo "Alembic failed" && exit 1)
+          else
+            echo "No alembic.ini, skipping migrations"
           fi
 
       - name: Run tests
@@ -55,5 +58,6 @@ jobs:
         env:
           DATABASE_URL: postgresql+psycopg2://user:password@localhost:5432/testdb
         run: |
-          pytest -q
+          echo "Running pytest..."
+          pytest -v
 
