@@ -30,4 +30,3 @@ flowchart LR
     EXP -->|Kafka| ML
     ML --> EXP
     EXP --> DB[(PostgreSQL)]
-
